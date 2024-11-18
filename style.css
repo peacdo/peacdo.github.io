@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url(http://weloveiconfonts.com/api/?family=entypo);
 
 :root {
     --primary-color: #cc0000;
@@ -194,11 +195,11 @@ body {
     width: 100%;
     height: 2px;
     background: repeating-linear-gradient(
-        to right,
-        #ff0000 0,
-        #ff0000 4px,
-        transparent 4px,
-        transparent 8px
+      to right,
+      #ff0000 0,
+      #ff0000 4px,
+      transparent 4px,
+      transparent 8px
     );
     margin-bottom: 2rem;
 }
@@ -252,7 +253,8 @@ body {
     display: flex;
     gap: 2rem;
     margin-top: 3rem;
-}
+    justify-content: center;
+  }
 
 .social-icon {
     width: 50px;
@@ -261,15 +263,58 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #00ff00;
-    font-size: 1.2rem;
+    color: #00fe44;
+    font-size: 1.5rem;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
 }
 
 .social-icon:hover {
-    background: #1a1a1a;
-    transform: translateY(-3px);
+    transform: rotate(360deg);
+    border-radius: 100px;
+    color: #ffffff;
+    background-color: #cc0000;
+    box-shadow: 0 0 15px rgba(204, 0, 0, 0.5);
+  }
+  
+  .social-icon.facebook:hover,
+  .social-icon.twitter:hover,
+  .social-icon.google:hover,
+  .social-icon.linkedin:hover {
+    color: #ffffff;
+  }
+
+.social-icon.facebook,
+.social-icon.twitter,
+.social-icon.google,
+.social-icon.linkedin {
+  color: #00fe44;
+}
+
+.social-icon.facebook {
+    color: #00ff44;
+}
+
+.social-icon.twitter {
+    color: #00ff44;
+}
+
+.social-icon.google {
+    color: #00ff44;
+}
+
+.social-icon.linkedin {
+    color: #00ff44;
+}
+
+.social-icon.facebook:hover,
+.social-icon.twitter:hover,
+.social-icon.google:hover,
+.social-icon.linkedin:hover {
+    color: #ffffff;
 }
 
 .section-head {
