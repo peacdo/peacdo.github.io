@@ -38,26 +38,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const formMessage = document.getElementById('formMessage');
 
     if (form) {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); 
 
-            const nameInput = form.querySelector('input[name="name"]');
-            const emailInput = form.querySelector('input[name="_replyto"]');
-            const messageInput = form.querySelector('textarea[name="message"]');
-
-            if (!nameInput?.value || !emailInput?.value || !messageInput?.value) {
-                formMessage.textContent = 'Please fill in all fields';
-                formMessage.className = 'form-message error';
-                formMessage.style.display = 'block';
-                return;
-            }
-
-            if (!isValidEmail(emailInput.value)) {
-                formMessage.textContent = 'Please enter a valid email address';
-                formMessage.className = 'form-message error';
-                formMessage.style.display = 'block';
-                return;
-            }
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
 
             form.classList.add('loading');
             const loadingDiv = document.createElement('div');
@@ -66,29 +52,30 @@ document.addEventListener('DOMContentLoaded', function() {
             form.appendChild(loadingDiv);
             loadingDiv.style.display = 'flex';
 
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: new FormData(form),
-                    headers: {
-                        'Accept': 'application/json'
-                    },
-                });
-
-                const responseData = await response.json();
-
-                if (response.ok) {
+            fetch('https://formspree.io/f/YOUR_FORM_ID', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
                     formMessage.textContent = 'Message sent successfully!';
                     formMessage.className = 'form-message success';
                     form.reset();
                 } else {
-                    throw new Error(responseData.error || 'Failed to send message');
+                    throw new Error('Failed to send message');
                 }
-            } catch (error) {
-                console.error('Form submission error:', error);
+            })
+            .catch(error => {
+                console.error('Error:', error);
                 formMessage.textContent = 'Failed to send message. Please try again.';
                 formMessage.className = 'form-message error';
-            } finally {
+            })
+            .finally(() => {
                 loadingDiv.remove();
                 form.classList.remove('loading');
                 formMessage.style.display = 'block';
@@ -96,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => {
                     formMessage.style.display = 'none';
                 }, 5000);
-            }
+            });
         });
 
         form.addEventListener('input', function() {
