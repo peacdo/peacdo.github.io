@@ -28,19 +28,44 @@ document.querySelector('.navbar-toggle').addEventListener('click', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('contactForm');
+    const form = document.querySelector('.minimal-form'); // Updated selector to match your CSS
     const formMessage = document.getElementById('formMessage');
+
+    if (!form) {
+        console.error('Form not found');
+        return;
+    }
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        const formData = new FormData(form);
+        // Get all input elements
+        const nameInput = form.querySelector('input[name="name"]');
+        const emailInput = form.querySelector('input[name="email"]');
+        const messageInput = form.querySelector('textarea[name="message"]');
+
+        // Basic validation
+        if (!nameInput?.value || !emailInput?.value || !messageInput?.value) {
+            formMessage.textContent = 'Please fill in all fields';
+            formMessage.className = 'form-message error';
+            formMessage.style.display = 'block';
+            return;
+        }
+
+        if (!isValidEmail(emailInput.value)) {
+            formMessage.textContent = 'Please enter a valid email address';
+            formMessage.className = 'form-message error';
+            formMessage.style.display = 'block';
+            return;
+        }
+
         const data = {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            message: formData.get('message')
+            name: nameInput.value,
+            email: emailInput.value,
+            message: messageInput.value
         };
 
+        // Show loading state
         form.classList.add('loading');
         const loadingDiv = document.createElement('div');
         loadingDiv.className = 'form-loading';
@@ -53,30 +78,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(data)
             });
+
+            const responseData = await response.json();
 
             if (response.ok) {
                 formMessage.textContent = 'Message sent successfully!';
                 formMessage.className = 'form-message success';
                 form.reset();
             } else {
-                throw new Error('Failed to send message');
+                throw new Error(responseData.error || 'Failed to send message');
             }
         } catch (error) {
+            console.error('Form submission error:', error);
             formMessage.textContent = 'Failed to send message. Please try again.';
             formMessage.className = 'form-message error';
         } finally {
-            loadingDiv.style.display = 'none';
+            loadingDiv.remove();
             form.classList.remove('loading');
-
+            formMessage.style.display = 'block';
+            
+            // Hide message after 5 seconds
             setTimeout(() => {
                 formMessage.style.display = 'none';
             }, 5000);
         }
     });
 
+    // Hide error message when user starts typing
     form.addEventListener('input', function() {
         formMessage.style.display = 'none';
     });
