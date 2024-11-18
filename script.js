@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
             form.appendChild(loadingDiv);
             loadingDiv.style.display = 'flex';
 
-            fetch('https://formspree.io/f/YOUR_FORM_ID', {
+            fetch('https://formspree.io/f/mqaklajz', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
