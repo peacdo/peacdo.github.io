@@ -133,6 +133,30 @@ body {
     align-items: center;
 }
 
+.about-text-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .about-text-content p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2em;
+    border-left: .2em solid #cc0000;
+    padding-left: .8em;
+    margin-bottom: .8em;
+  }
+  
+  @media (max-width: 768px) {
+    .about-text-content {
+      padding: 0 0.5rem;
+    }
+    
+    .about-text-content p {
+      font-size: 1.1em;
+    }
+  }
+
 .about-text p {
     border-left: 0.2em solid var(--primary-color);
     padding-left: 1em;
